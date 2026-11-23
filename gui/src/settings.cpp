@@ -565,7 +565,7 @@ unsigned int Settings::GetBitrateRemotePS4() const
 
 unsigned int Settings::GetBitrateLocalPS5() const
 {
-	return settings.value("settings/bitrate_local_ps5", 0).toUInt();
+	return settings.value("settings/bitrate_local_ps5", 25000).toUInt(); // DA Remote Play: 25 Mbps default on the home network
 }
 
 unsigned int Settings::GetBitrateRemotePS5() const

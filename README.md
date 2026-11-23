@@ -1,3 +1,12 @@
+# DA Remote Play
+
+PS5 Remote Play for Windows, built on [chiaki-ng](https://github.com/chiaki-ng/chiaki-ng) (AGPL-3.0).
+Changes from chiaki-ng: DA Remote Play name and icon, 25 Mbps default bitrate for home streaming,
+and Wi-Fi background scans paused while streaming (fixes repeating lag spikes on laptops).
+Build: Actions > "Build DA Remote Play Windows x64" > Run workflow.
+
+---
+
 
 ![chiaki-ng Logo](gui/res/chiaking-logo.svg)
 

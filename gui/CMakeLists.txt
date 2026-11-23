@@ -85,6 +85,8 @@ elseif(WIN32)
 	list(APPEND SOURCE_FILES
 		include/windowsWakeSleep.h
 		src/windowsWakeSleep.cpp
+		include/dawifiboost.h
+		src/dawifiboost.cpp
 	)
 endif()
 
