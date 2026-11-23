@@ -1,4 +1,4 @@
-name: Build chiaki-ng msys2 x86 Windows
+name: Build DA Remote Play Windows (MSYS2)
 
 on:
   workflow_dispatch:
@@ -108,17 +108,19 @@ jobs:
           CHIAKI_VERSION_MAJOR="$(grep 'CHIAKI_VERSION_MAJOR' CMakeLists.txt | grep -Eo '[0-9]+')"
           CHIAKI_VERSION_MINOR="$(grep 'CHIAKI_VERSION_MINOR' CMakeLists.txt | grep -Eo '[0-9]+')"
           CHIAKI_VERSION_PATCH="$(grep 'CHIAKI_VERSION_PATCH' CMakeLists.txt | grep -Eo '[0-9]+')"
-          RELEASE_PACKAGE_FILE="chiaki-ng-win_x64-MSYS2-portable-$CHIAKI_VERSION_MAJOR.$CHIAKI_VERSION_MINOR.$CHIAKI_VERSION_PATCH-test-build-${{ github.sha }}.zip"
-          zip -r $RELEASE_PACKAGE_FILE chiaki-ng-Win
+          RELEASE_PACKAGE_FILE="DA-Remote-Play-win_x64-$CHIAKI_VERSION_MAJOR.$CHIAKI_VERSION_MINOR.$CHIAKI_VERSION_PATCH.zip"
+          cp -r chiaki-ng-Win DA-Remote-Play
+          mv "DA-Remote-Play/chiaki.exe" "DA-Remote-Play/DA Remote Play.exe"
+          zip -r "$RELEASE_PACKAGE_FILE" DA-Remote-Play
           echo "RELEASE_PACKAGE_PATH=${RELEASE_PACKAGE_FILE}" >> $GITHUB_ENV
 
       - name: Upload chiaki-ng Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: chiaki-ng-win_x64-MSYS2-Release-portable.zip
+          name: DA-Remote-Play-win_x64
           path: ${{ env.RELEASE_PACKAGE_PATH }}
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 30
 
       - name: Compile .ISS to .EXE Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.9
