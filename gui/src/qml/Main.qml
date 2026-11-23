@@ -12,7 +12,10 @@ Item {
     readonly property bool preferSeparateStreamSettingsWindows: Chiaki.window.runtimeRendererBackend === 1 && Chiaki.session
     property bool useSeparateStreamSettingsWindows: false
     Material.theme: Material.Dark
-    Material.accent: "#00a7ff"
+    Material.accent: "#7C6CFF"
+    Material.primary: "#161A23"
+    Material.background: "#0E1016"
+    Material.foreground: "#E8EAF0"
 
     function controllerButton(name) {
         let type = "deck";

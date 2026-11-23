@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: LicenseRef-AGPL-3.0-only-OpenSSL
 
 #include <streamsession.h>
-#include "dawifiboost.h"
+#include "dastreamboost.h"
 #include <settings.h>
 #include <controllermanager.h>
 
@@ -714,7 +714,7 @@ StreamSession::StreamSession(const StreamSessionConnectInfo &connect_info, QObje
 
 StreamSession::~StreamSession()
 {
-	DaWifiBoostStop();
+	DaStreamBoostStop();
 	mic_active.storeRelaxed(false);
 	StopAudioOutDrainThread();
 	if(audio_out)
@@ -830,12 +830,12 @@ void StreamSession::Start()
 		throw ChiakiException("Chiaki Session Start failed");
 	}
 	session_started = true;
-	DaWifiBoostStart();
+	DaStreamBoostStart();
 }
 
 void StreamSession::Stop()
 {
-	DaWifiBoostStop();
+	DaStreamBoostStop();
 	mic_active.storeRelaxed(false);
 	chiaki_session_stop(&session);
 }
