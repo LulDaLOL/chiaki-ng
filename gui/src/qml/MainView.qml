@@ -10,11 +10,11 @@ Pane {
     id: consolePane
     padding: 0
 
-    readonly property color headerColor: "#141823"
-    readonly property color cardColor: "#171B26"
-    readonly property color cardColorActive: "#1E2333"
-    readonly property color borderColor: "#262C3A"
-    readonly property color mutedColor: "#8A92A6"
+    readonly property color headerColor: "#22273A"
+    readonly property color cardColor: "#262B3E"
+    readonly property color cardColorActive: "#2F3550"
+    readonly property color borderColor: "#3A4158"
+    readonly property color mutedColor: "#AEB5C7"
     readonly property color goodColor: "#22C55E"
     readonly property color warnColor: "#F59E0B"
     readonly property int visibleHostCount: {
@@ -28,9 +28,9 @@ Pane {
 
     background: Rectangle {
         gradient: Gradient {
-            GradientStop { position: 0.0; color: "#161A2A" }
-            GradientStop { position: 0.45; color: "#0E1016" }
-            GradientStop { position: 1.0; color: "#0E1016" }
+            GradientStop { position: 0.0; color: "#2A2F48" }
+            GradientStop { position: 0.5; color: "#1C2030" }
+            GradientStop { position: 1.0; color: "#1A1D2B" }
         }
     }
 
@@ -166,6 +166,14 @@ Pane {
                     else
                         root.showPSNTokenDialog(false);
                 }
+                Material.roundedScale: Material.SmallScale
+            }
+
+            Button {
+                text: qsTr("Brightness")
+                flat: true
+                focusPolicy: Qt.NoFocus
+                onClicked: brightnessPopup.open()
                 Material.roundedScale: Material.SmallScale
             }
 
@@ -314,7 +322,7 @@ Pane {
                     Layout.preferredHeight: 116
                     Layout.leftMargin: 8
                     radius: 12
-                    color: "#0F121A"
+                    color: "#1D2132"
                     Image {
                         anchors.fill: parent
                         anchors.margins: 12
@@ -557,5 +565,11 @@ Pane {
                 font.pixelSize: 14
             }
         }
+    }
+
+    BrightnessPopup {
+        id: brightnessPopup
+        x: consolePane.width - width - 24
+        y: header.height + 8
     }
 }

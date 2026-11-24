@@ -49,6 +49,7 @@ Item {
         }
     }
 
+    // DA Remote Play: dialog header
     ToolBar {
         id: toolBar
         anchors {
@@ -56,20 +57,33 @@ Item {
             left: parent.left
             right: parent.right
         }
-        height: 80
+        height: 84
+        background: Rectangle {
+            color: "#22273A"
+            Rectangle {
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+                height: 1
+                color: "#3A4158"
+            }
+        }
 
         RowLayout {
             anchors {
                 fill: parent
-                leftMargin: 10
-                rightMargin: 10
+                leftMargin: 16
+                rightMargin: 16
             }
+            spacing: 14
 
             Button {
-                Layout.fillHeight: true
-                Layout.preferredWidth: 100
+                Layout.alignment: Qt.AlignVCenter
                 flat: true
-                text: "❮"
+                text: "←  " + qsTr("Back")
+                font.pixelSize: 16
                 focusPolicy: Qt.NoFocus
                 Material.roundedScale: Material.SmallScale
                 onClicked: {
@@ -78,44 +92,44 @@ Item {
                 }
             }
 
-            Item { Layout.fillWidth: true }
+            ColumnLayout {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                spacing: 2
+
+                Label {
+                    id: titleLabel
+                    font.bold: true
+                    font.pixelSize: 24
+                    elide: Text.ElideRight
+                    Layout.fillWidth: true
+                }
+
+                Label {
+                    id: headerLabel
+                    visible: text.length > 0
+                    font.pixelSize: 13
+                    color: "#AEB5C7"
+                    elide: Text.ElideRight
+                    Layout.fillWidth: true
+                }
+            }
 
             Button {
                 id: okButton
-                Layout.fillHeight: true
-                flat: true
-                padding: 30
-                font.pixelSize: 25
+                Layout.alignment: Qt.AlignVCenter
+                highlighted: true
+                font.pixelSize: 17
+                font.weight: Font.DemiBold
+                leftPadding: 26
+                rightPadding: 26
                 focusPolicy: Qt.NoFocus
-                Material.roundedScale: Material.SmallScale
+                Material.roundedScale: Material.MediumScale
                 onClicked: dialog.accepted()
                 icon.source: "qrc:/icons/options.svg";
-                icon.width: 50
-                icon.height: 50
+                icon.width: 28
+                icon.height: 28
             }
-        }
-
-        Label {
-            id: titleLabel
-            anchors.centerIn: parent
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            font.bold: true
-            font.pixelSize: 26
-        }
-
-        Label {
-            id: headerLabel
-            anchors {
-                top: parent.top
-                left: titleLabel.right
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-            }
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            font.bold: true
-            font.pixelSize: 14
         }
     }
 

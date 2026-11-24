@@ -515,7 +515,7 @@ Item {
                 value: Chiaki.settings.audioVolume
                 onMoved: Chiaki.settings.audioVolume = value
                 KeyNavigation.left: closeButton
-                KeyNavigation.right: brightnessSlider
+                KeyNavigation.right: brightnessButton
                 Keys.onEscapePressed: menuController.close()
                 Label {
                     anchors {
@@ -534,76 +534,28 @@ Item {
                 Layout.rightMargin: 10
             }
 
-            // DA Remote Play: picture brightness and color, applied live
-            Slider {
-                id: brightnessSlider
-                Layout.rightMargin: 20
-                orientation: Qt.Vertical
-                from: -0.3
-                to: 0.6
-                Layout.preferredHeight: 100
-                padding: 10
-                stepSize: 0.01
-                value: Chiaki.settings.placeboColorAdjustmentBrightness
-                onMoved: {
-                    Chiaki.settings.placeboColorAdjustmentBrightness = value;
-                    Chiaki.window.setPictureAdjust(value, colorSlider.value);
-                }
-                Component.onCompleted: Chiaki.window.setPictureAdjust(Chiaki.settings.placeboColorAdjustmentBrightness, Chiaki.settings.placeboColorAdjustmentSaturation)
-                KeyNavigation.left: volumeSlider
-                KeyNavigation.right: colorSlider
-                Keys.onEscapePressed: menuController.close()
-                Label {
-                    anchors {
-                        top: parent.bottom
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                    text: qsTr("Brightness %1").arg((parent.value >= 0 ? "+" : "") + (parent.value * 100).toFixed(0))
-                }
-            }
-
-            Slider {
-                id: colorSlider
-                Layout.rightMargin: 20
-                orientation: Qt.Vertical
-                from: 0.0
-                to: 2.0
-                Layout.preferredHeight: 100
-                padding: 10
-                stepSize: 0.01
-                value: Chiaki.settings.placeboColorAdjustmentSaturation
-                onMoved: {
-                    Chiaki.settings.placeboColorAdjustmentSaturation = value;
-                    Chiaki.window.setPictureAdjust(brightnessSlider.value, value);
-                }
-                KeyNavigation.left: brightnessSlider
-                KeyNavigation.right: pictureResetButton
-                Keys.onEscapePressed: menuController.close()
-                Label {
-                    anchors {
-                        top: parent.bottom
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                    text: qsTr("Color %1%").arg((parent.value * 100).toFixed(0))
-                }
-            }
-
+            // DA Remote Play: brightness panel (screen, boost, stream color)
             ToolButton {
-                id: pictureResetButton
-                Layout.rightMargin: 10
-                text: qsTr("Reset")
+                id: brightnessButton
+                Layout.rightMargin: 20
+                text: qsTr("Brightness")
                 padding: 10
-                onClicked: {
-                    Chiaki.settings.placeboColorAdjustmentBrightness = 0.0;
-                    Chiaki.settings.placeboColorAdjustmentSaturation = 1.0;
-                    brightnessSlider.value = 0.0;
-                    colorSlider.value = 1.0;
-                    Chiaki.window.setPictureAdjust(0.0, 1.0);
+                onClicked: streamBrightnessPopup.open()
+                Component.onCompleted: {
+                    if (Chiaki.settings.placeboColorAdjustmentBrightness != 0)
+                        Chiaki.settings.placeboColorAdjustmentBrightness = 0.0;
+                    Chiaki.window.setPictureAdjust(0.0, Chiaki.settings.placeboColorAdjustmentSaturation);
                 }
-                KeyNavigation.left: colorSlider
+                KeyNavigation.left: volumeSlider
                 KeyNavigation.right: muteButton
                 Keys.onReturnPressed: clicked()
                 Keys.onEscapePressed: menuController.close()
+
+                BrightnessPopup {
+                    id: streamBrightnessPopup
+                    showColor: true
+                    anchors.centerIn: Overlay.overlay
+                }
             }
 
             ToolSeparator {
@@ -620,7 +572,7 @@ Item {
                 enabled: Chiaki.session && Chiaki.session.connected
                 checked: Chiaki.session && !Chiaki.session.muted
                 onToggled: Chiaki.session.muted = !Chiaki.session.muted
-                KeyNavigation.left: pictureResetButton
+                KeyNavigation.left: brightnessButton
                 KeyNavigation.right: zoomButton
                 Keys.onReturnPressed: toggled()
                 Keys.onEscapePressed: menuController.close()

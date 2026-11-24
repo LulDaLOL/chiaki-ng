@@ -1,4 +1,5 @@
 #include "qmlbackend.h"
+#include "dadisplay.h"
 #include "qmlsettings.h"
 #include "qmlmainwindow.h"
 #include "streamsession.h"
@@ -295,6 +296,7 @@ QmlBackend::QmlBackend(Settings *settings, QmlMainWindow *window)
     qmlRegisterUncreatableType<QmlMainWindow>(uri, 1, 0, "ChiakiWindow", {});
     qmlRegisterUncreatableType<QmlSettings>(uri, 1, 0, "ChiakiSettings", {});
     qmlRegisterUncreatableType<StreamSession>(uri, 1, 0, "ChiakiSession", {});
+    qmlRegisterSingletonInstance(uri, 1, 0, "DaDisplay", new DaDisplay(this));
 
     QObject *frame_obj = new QObject();
     frame_thread = new QThread(frame_obj);

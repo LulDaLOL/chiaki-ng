@@ -165,13 +165,16 @@ DialogView {
     }
 
     Item {
+        // DA Remote Play: the tab bar is kept for keyboard/controller paging (L1/R1)
+        // but drawn as the sidebar below.
         TabBar {
             id: bar
+            visible: false
+            height: 0
             anchors {
                 top: parent.top
                 left: parent.left
                 right: parent.right
-                topMargin: 5
             }
             TabButton {
                 id: general
@@ -420,12 +423,100 @@ DialogView {
             }
         }
 
-        StackLayout {
+        Rectangle {
+            id: settingsSidebar
             anchors {
-                top: bar.bottom
+                top: parent.top
                 left: parent.left
+                bottom: parent.bottom
+            }
+            width: 250
+            color: "#20243A"
+
+            Rectangle {
+                anchors {
+                    top: parent.top
+                    right: parent.right
+                    bottom: parent.bottom
+                }
+                width: 1
+                color: "#3A4158"
+            }
+
+            Column {
+                anchors {
+                    fill: parent
+                    topMargin: 18
+                    leftMargin: 14
+                    rightMargin: 14
+                }
+                spacing: 4
+
+                Label {
+                    leftPadding: 12
+                    bottomPadding: 10
+                    text: qsTr("SETTINGS")
+                    font.pixelSize: 13
+                    font.weight: Font.DemiBold
+                    font.letterSpacing: 1.5
+                    color: "#AEB5C7"
+                }
+
+                Repeater {
+                    model: [qsTr("General"), qsTr("Video"), qsTr("Stream"), qsTr("Audio & Wi-Fi"), qsTr("Consoles"), qsTr("Keyboard"), qsTr("Controllers"), qsTr("Remote Play"), qsTr("Config")]
+                    delegate: ItemDelegate {
+                        id: navItem
+                        width: parent.width
+                        height: 48
+                        text: modelData
+                        font.pixelSize: 16
+                        font.weight: bar.currentIndex === index ? Font.DemiBold : Font.Normal
+                        focusPolicy: Qt.NoFocus
+                        leftPadding: 18
+                        onClicked: bar.currentIndex = index
+                        background: Rectangle {
+                            radius: 10
+                            color: bar.currentIndex === index ? "#3B3672" : (navItem.hovered ? "#2B3150" : "transparent")
+                            Rectangle {
+                                visible: bar.currentIndex === index
+                                anchors {
+                                    left: parent.left
+                                    verticalCenter: parent.verticalCenter
+                                    leftMargin: 6
+                                }
+                                width: 4
+                                height: 22
+                                radius: 2
+                                color: Material.accent
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            id: settingsCard
+            anchors {
+                top: parent.top
+                left: settingsSidebar.right
                 right: parent.right
                 bottom: parent.bottom
+                margins: 18
+            }
+            radius: 16
+            color: "#22273A"
+            border.width: 1
+            border.color: "#343B52"
+        }
+
+        StackLayout {
+            anchors {
+                top: settingsCard.top
+                left: settingsCard.left
+                right: settingsCard.right
+                bottom: settingsCard.bottom
+                margins: 6
             }
             currentIndex: bar.currentIndex
             onCurrentIndexChanged: {

@@ -13,9 +13,9 @@ Item {
     property bool useSeparateStreamSettingsWindows: false
     Material.theme: Material.Dark
     Material.accent: "#7C6CFF"
-    Material.primary: "#161A23"
-    Material.background: "#0E1016"
-    Material.foreground: "#E8EAF0"
+    Material.primary: "#22273A"
+    Material.background: "#1A1D2B"
+    Material.foreground: "#F2F4F8"
 
     function controllerButton(name) {
         let type = "deck";
