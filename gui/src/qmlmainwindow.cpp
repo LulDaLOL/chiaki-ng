@@ -9,6 +9,8 @@
 
 #define PL_LIBAV_IMPLEMENTATION 0
 #include <libplacebo/utils/libav.h>
+#include <algorithm>
+#include <cmath>
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -6734,6 +6736,20 @@ void QmlMainWindow::render()
 
     struct pl_render_params params = *render_params;
     params.frame_mixer = effectiveFrameMixerConfig(&params);
+    // DA Remote Play: brightness / color sliders, applied on top of any render preset.
+    struct pl_color_adjustment da_picture_adjust = pl_color_adjustment_neutral;
+    {
+        const float da_brightness = picture_brightness.load(std::memory_order_relaxed);
+        const float da_saturation = picture_saturation.load(std::memory_order_relaxed);
+        // The Custom preset already applies these same settings through its libplacebo options.
+        if (video_preset != VideoPreset::Custom && (da_brightness != 0.0f || da_saturation != 1.0f)) {
+            if (params.color_adjustment)
+                da_picture_adjust = *params.color_adjustment;
+            da_picture_adjust.brightness += da_brightness;
+            da_picture_adjust.saturation *= da_saturation;
+            params.color_adjustment = &da_picture_adjust;
+        }
+    }
     const bool content_timed = params.frame_mixer == nullptr;
     const bool mixer_active = params.frame_mixer != nullptr;
     const bool has_settings = settings != nullptr;
@@ -7645,6 +7661,16 @@ void QmlMainWindow::render()
         schedulePostRenderWork();
     schedulePostSwapchainRecreateRefresh();
 
+}
+
+void QmlMainWindow::setPictureAdjust(float brightness, float saturation)
+{
+    if (!std::isfinite(brightness) || !std::isfinite(saturation))
+        return;
+    picture_brightness.store(std::clamp(brightness, -1.0f, 1.0f), std::memory_order_relaxed);
+    picture_saturation.store(std::clamp(saturation, 0.0f, 2.0f), std::memory_order_relaxed);
+    updatePlacebo(); // lets the Custom preset re-read the saved values
+    requestOverlayUpdate();
 }
 
 bool QmlMainWindow::handleShortcut(QKeyEvent *event)

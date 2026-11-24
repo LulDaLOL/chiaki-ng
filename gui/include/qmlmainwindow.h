@@ -151,6 +151,8 @@ public:
     Q_INVOKABLE void requestOverlayUpdate();
     Q_INVOKABLE void setOverlayInteractionActive(bool active);
     Q_INVOKABLE void setStatsOverlayActive(bool active);
+    // DA Remote Play: live picture brightness (-1..1, 0 = normal) and color/saturation (0..2, 1 = normal)
+    Q_INVOKABLE void setPictureAdjust(float brightness, float saturation);
     Q_INVOKABLE void noteLoadingTransitionComplete();
     Q_INVOKABLE void presentStartupWarmupFrame(unsigned width, unsigned height, bool hdr);
     void armVerbosePlaceboQuietWindow();
@@ -328,6 +330,8 @@ private:
     StreamSession *session = {};
     AVBufferRef *vulkan_hw_dev_ctx = nullptr;
     std::atomic<double> queue_depth_average{0.0};
+    std::atomic<float> picture_brightness{0.0f};
+    std::atomic<float> picture_saturation{1.0f};
     QAtomicInteger<int> queue_depth_cached = 0;
     double pending_frame_age = 0.0;
     uint64_t last_placebo_reset_ts = 0;
